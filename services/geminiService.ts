@@ -121,9 +121,9 @@ export const generatePodcastAssets = async (transcript: string): Promise<Podcast
     required: ["episodeTitles", "hook", "showNotes", "blogPost", "timestamps", "newsletterDraft", "guestSwipeEmail", "linkedinCarousel", "viralQuotes", "socialHooks", "youtube"],
   };
 
-  // Using gemini-3-pro-preview for speed and large context window
+  // Using gemini-2.5-flash-lite for speed and large context window
   const response = await ai.models.generateContent({
-    model: "gemini-3-pro-preview", 
+    model: "gemini-2.5-flash-lite", 
     contents: {
       parts: [
         {
