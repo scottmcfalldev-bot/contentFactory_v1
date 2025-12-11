@@ -5,8 +5,9 @@ import { PodcastAssets } from "../types";
 const getAIClient = () => {
   const apiKey = process.env.API_KEY;
   if (!apiKey) {
-    throw new Error("API Key not found in environment.");
+    throw new Error("API Key not found in environment. Make sure GEMINI_API_KEY is set.");
   }
+  console.log('API Key present:', apiKey ? 'Yes' : 'No');
   return new GoogleGenAI({ apiKey });
 };
 
