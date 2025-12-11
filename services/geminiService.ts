@@ -121,9 +121,9 @@ export const generatePodcastAssets = async (transcript: string): Promise<Podcast
     required: ["episodeTitles", "hook", "showNotes", "blogPost", "timestamps", "newsletterDraft", "guestSwipeEmail", "linkedinCarousel", "viralQuotes", "socialHooks", "youtube"],
   };
 
-  // Using gemini-2.5-flash for speed and large context window
+  // Using gemini-3-pro-preview for speed and large context window
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash", 
+    model: "gemini-3-pro-preview", 
     contents: {
       parts: [
         {
@@ -171,7 +171,7 @@ export const generatePodcastAssets = async (transcript: string): Promise<Podcast
 export const createChatSession = (transcript: string) => {
   const ai = getAIClient();
   const chat = ai.chats.create({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-1.5-flash',
     history: [
       {
         role: 'user',
