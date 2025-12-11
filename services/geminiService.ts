@@ -105,14 +105,15 @@ export const generatePodcastAssets = async (transcript: string): Promise<Podcast
           },
           shorts: {
              type: Type.ARRAY,
-             description: "Identify 3 moments that would make viral 60-second shorts.",
+             description: "Identify 3 moments that would make viral 60-second shorts. Timestamp format: 00:00:00 or HH:MM:SS",
              items: {
                 type: Type.OBJECT,
                 properties: {
-                   timestamp: { type: Type.STRING },
+                   timestamp: { type: Type.STRING, description: "Exact timestamp in format HH:MM:SS (e.g., '00:05:32')" },
                    hook: { type: Type.STRING, description: "Why this specific moment will stop the scroll." },
                    score: { type: Type.INTEGER, description: "Viral potential score 1-10" }
-                }
+                },
+                required: ["timestamp", "hook", "score"]
              }
           }
         }
@@ -161,10 +162,20 @@ export const generatePodcastAssets = async (transcript: string): Promise<Podcast
   }
 
   try {
-    return JSON.parse(text) as PodcastAssets;
+    const parsed = JSON.parse(text) as PodcastAssets;
+    
+    // Validate and clean YouTube shorts timestamps
+    if (parsed.youtube?.shorts) {
+      parsed.youtube.shorts = parsed.youtube.shorts.filter(short => {
+        // Filter out shorts with malformed timestamps (longer than 10 chars)
+        return short.timestamp && short.timestamp.length <= 10;
+      });
+    }
+    
+    return parsed;
   } catch (error) {
-    console.error("Failed to parse Gemini response:", text);
-    throw new Error("Failed to parse generated assets.");
+    console.error("Failed to parse Gemini response:", text?.substring(0, 500));
+    throw new Error("Failed to parse generated assets. The AI response was malformed.");
   }
 };
 
